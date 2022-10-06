@@ -2,16 +2,19 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import { useEffect, useState } from 'react';
 import styles from '../styles/Home.module.css'
-
+interface clipboardItem {
+  name: string,
+  createdAt: Date;
+}
+const Home: NextPage = () => {
+  const [clipboardItens, setClipboardItens] = useState<clipboardItem[]>([]);
 
   function handlepaste(e: React.ClipboardEvent) {
-    // // Browsers that support the 'text/html' type in the Clipboard API (Chrome, Firefox 22+)
     if (e && e.clipboardData && e.clipboardData.types && e.clipboardData.getData) {
       let types = e.clipboardData.types;
       if (((types instanceof DOMStringList) && types.contains("text/html")) || (types.indexOf && types.indexOf('text/html') !== -1)) {
         let pastedData = e.clipboardData.getData('text/plain');
         processPaste(pastedData);
-        // // Stop the data from actually being pasted
         e.stopPropagation();
         e.preventDefault();
         return false;
@@ -19,15 +22,16 @@ import styles from '../styles/Home.module.css'
     }
   }
 
-  function processPaste(pastedData: String) {
-    // console.log( pastedData);
-    alert(pastedData);
+  function processPaste(pastedData: string) {
+    setClipboardItens(
+      [...clipboardItens,
+      {
+        name: pastedData,
+        createdAt: new Date()
+      }]
+
+    );
   }
-
-
-const Home: NextPage = () => {
-  const [clipboardItens, setClipboardItens] = useState([]);
-
   return (
     <div id="editableDiv" className={styles.container} onPaste={handlepaste}>
       <Head>
@@ -43,9 +47,20 @@ const Home: NextPage = () => {
 
         <div className={styles.grid}>
           <>
-          {clipboardItens.length > 0 && clipboardItens.map((item: JSX.Element) => {
-            console.log(item)
-          })}
+            {clipboardItens.length > 0 && clipboardItens.map((item) => {
+              return (
+                <div className={styles.cardContainer}>
+                  <div className={styles.card}>
+                    <p>{item.name}</p>
+                  </div>
+                  <span className={styles.code}>
+                    {new Intl.DateTimeFormat('pt-BR', { dateStyle: 'short', timeStyle: 'short' })
+                      .format(new Date(item.createdAt))
+                    }
+                  </span>
+                </div>
+              )
+            })}
           </>
         </div>
       </main>
@@ -57,7 +72,7 @@ const Home: NextPage = () => {
           rel="noopener noreferrer"
         >
           Created by Luma
-         
+
         </a>
       </footer>
     </div>
