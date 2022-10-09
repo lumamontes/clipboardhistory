@@ -14,7 +14,7 @@ const Home: NextPage = () => {
   function handlepaste(e: React.ClipboardEvent) {
     if (e && e.clipboardData && e.clipboardData.types && e.clipboardData.getData) {
       let types = e.clipboardData.types;
-      if (((types instanceof DOMStringList) && types.contains("text/html")) || (types.indexOf && types.indexOf('text/html') !== -1)) {
+      if (((types instanceof DOMStringList) && types.contains("text/html")) || (types.indexOf && types.indexOf('text/html') !== -1)  ||  (types.indexOf && types.indexOf('text/plain') !== -1)) {
         let pastedData = e.clipboardData.getData('text/plain');
         processPaste(pastedData);
         e.stopPropagation();
