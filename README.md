@@ -12,6 +12,8 @@ Simple website to store clipboard information, with the intention to practice Ne
 
 ### :rocket:  Demo
 
+https://clipboardhistory.vercel.app/
+
 ### :wrench:  Installation
 
 1. Clone
